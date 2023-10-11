@@ -28,15 +28,14 @@ jobs:
         terraform_version: 1.6.1
         cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
+    # Checks that all Terraform configuration files adhere to a canonical format
+    - name: Terraform Format
+      run: terraform fmt -check -recursive
+
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
       working-directory: applications/demo
       run: terraform init
-
-    # Checks that all Terraform configuration files adhere to a canonical format
-    - name: Terraform Format
-      working-directory: applications/demo
-      run: terraform fmt -check
 
     # Generates an execution plan for Terraform
     - name: Terraform Plan
