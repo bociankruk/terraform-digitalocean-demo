@@ -1,32 +1,54 @@
+
+
+resource "digitalocean_record" "a" {
+  domain = var.app_domain_id
+  type   = "A"
+  name   = var.app_name
+  value  = digitalocean_loadbalancer.lb.ip
+}
+
+resource "digitalocean_record" "cname" {
+  domain = var.app_domain_id
+  type   = "CNAME"
+  name   = "www"
+  value  = "${var.app_name}."
+}
+
 resource "digitalocean_certificate" "cert" {
   name    = "${var.app_name}-le-cert"
   type    = "lets_encrypt"
-  domains = ["example.com"]
-}
+  domains = ["${var.app_name}.${var.app_domain}", "www.${var.app_name}.${var.app_domain}"]
 
-resource "digitalocean_app" "app" {
-  spec {
-    name   = "${var.app_name}-app"
-    region = var.region
-
-    service {
-      name               = "${var.app_name}-service"
-      environment_slug   = var.app_environment_slug
-      instance_count     = var.app_instance_count
-      instance_size_slug = var.app_instance_size_slug
-
-      git {
-        repo_clone_url = var.app_git_repo
-        branch         = var.app_git_branch
-      }
-    }
+  lifecycle {
+    create_before_destroy = true
   }
+  depends_on = [digitalocean_record.a, digitalocean_record.cname]
 }
 
+# resource "digitalocean_app" "app" {
+#   spec {
+#     name   = "${var.app_name}-app"
+#     region = var.region
 
-resource "digitalocean_loadbalancer" "public" {
-  name   = "${var.app_name}-lb"
-  region = var.region
+#     service {
+#       name               = "${var.app_name}-service"
+#       environment_slug   = var.app_environment_slug
+#       instance_count     = var.app_instance_count
+#       instance_size_slug = var.app_instance_size_slug
+
+#       git {
+#         repo_clone_url = var.app_git_repo
+#         branch         = var.app_git_branch
+#       }
+#     }
+#   }
+# }
+
+
+resource "digitalocean_loadbalancer" "lb" {
+  name                   = "${var.app_name}-lb"
+  region                 = var.region
+  redirect_http_to_https = true
 
   forwarding_rule {
     entry_port     = 443
@@ -39,9 +61,10 @@ resource "digitalocean_loadbalancer" "public" {
   }
 
   healthcheck {
-    port     = 22
-    protocol = "tcp"
+    port     = 443
+    protocol = "https"
+    path     = "/health"
   }
 
-  droplet_ids = [digitalocean_app.app.id]
+  #droplet_ids = [digitalocean_app.app.id]
 }
