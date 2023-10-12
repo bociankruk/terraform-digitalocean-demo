@@ -2,16 +2,16 @@ resource "digitalocean_domain" "domain" {
   name = var.app_domain
 }
 
+data "local_file" "user_data" {
+  filename = "${path.module}/files/user_data"
+}
+
 module "laravel-app" {
-  source                 = "../../modules/terraform-azure-app"
-  region                 = var.region
-  app_name               = "laravel"
-  app_domain             = var.app_domain
-  app_domain_id          = digitalocean_domain.domain.id
-  app_environment_slug   = "php"
-  app_http_port          = 8080
-  app_instance_count     = 1
-  app_instance_size_slug = "basic-xxs"
-  app_run_command        = "heroku-php-apache2 public/"
-  app_git_repo           = "https://github.com/digitalocean/sample-laravel.git"
+  source            = "../../modules/terraform-digitalocean-app"
+  droplet_count     = 1
+  droplet_user_data = data.local_file.user_data.content
+  region            = var.region
+  app_name          = "laravel"
+  app_domain        = var.app_domain
+  app_domain_id     = digitalocean_domain.domain.id
 }
