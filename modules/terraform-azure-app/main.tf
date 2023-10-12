@@ -24,24 +24,25 @@ resource "digitalocean_certificate" "cert" {
   }
 }
 
-# resource "digitalocean_app" "app" {
-#   spec {
-#     name   = "${var.app_name}-app"
-#     region = var.region
+resource "digitalocean_app" "app" {
+  spec {
+    name   = "${var.app_name}-app"
+    region = var.region
 
-#     service {
-#       name               = "${var.app_name}-service"
-#       environment_slug   = var.app_environment_slug
-#       instance_count     = var.app_instance_count
-#       instance_size_slug = var.app_instance_size_slug
-
-#       git {
-#         repo_clone_url = var.app_git_repo
-#         branch         = var.app_git_branch
-#       }
-#     }
-#   }
-# }
+    service {
+      name               = "${var.app_name}-service"
+      http_port          = var.app_http_port
+      environment_slug   = var.app_environment_slug
+      instance_count     = var.app_instance_count
+      instance_size_slug = var.app_instance_size_slug
+      run_command        = var.app_run_command
+      git {
+        repo_clone_url = var.app_git_repo
+        branch         = var.app_git_branch
+      }
+    }
+  }
+}
 
 
 resource "digitalocean_loadbalancer" "lb" {
@@ -65,5 +66,5 @@ resource "digitalocean_loadbalancer" "lb" {
     path     = "/health"
   }
 
-  #droplet_ids = [digitalocean_app.app.id]
+  droplet_ids = [digitalocean_app.app.id]
 }
