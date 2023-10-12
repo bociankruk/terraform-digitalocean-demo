@@ -10,8 +10,8 @@ resource "digitalocean_record" "a" {
 resource "digitalocean_record" "cname" {
   domain = var.app_domain_id
   type   = "CNAME"
-  name   = "www"
-  value  = "${var.app_name}."
+  name   = "www.${var.app_name}"
+  value  = "${digitalocean_record.a.fqdn}."
 }
 
 resource "digitalocean_certificate" "cert" {
@@ -22,7 +22,6 @@ resource "digitalocean_certificate" "cert" {
   lifecycle {
     create_before_destroy = true
   }
-  depends_on = [digitalocean_record.a, digitalocean_record.cname]
 }
 
 # resource "digitalocean_app" "app" {
