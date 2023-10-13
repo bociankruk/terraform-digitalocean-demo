@@ -36,6 +36,11 @@ variable "droplet_user_data" {
   description = "A postinstall script content"
 }
 
+variable "app_http_port" {
+  type = number
+  description = "The http port on which application is running."
+}
+
 # variable "droplet_ssh_key" {
 #   type = string
 #   description = "A public SSH key to access droplet"

@@ -11,7 +11,7 @@ write_files:
   permissions: '0755'
   content: |
     #!/bin/bash
-    exec > >(tee /var/log/user-data.log | logger -t user-data -s 2>/dev/console) 2>&1
+    exec > >(tee /var/log/user-data-post-install.log | logger -t user-data -s 2>/dev/console) 2>&1
     echo "Install docker"
     curl -fsSL https://get.docker.com -o /tmp/get-docker.sh
     sh /tmp/get-docker.sh
@@ -24,7 +24,7 @@ write_files:
   permissions: '0755'
   content: |
     #!/bin/bash
-    exec > >(tee /var/log/user-data.log | logger -t user-data -s 2>/dev/console) 2>&1
+    exec > >(tee /var/log/user-data-run-app.log | logger -t user-data -s 2>/dev/console) 2>&1
     echo "Start the app!"
     mkdir /app
     cd /app
