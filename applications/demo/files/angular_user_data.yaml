@@ -6,6 +6,8 @@ users:
     sudo: ['ALL=(ALL) NOPASSWD:ALL']
     ssh-authorized-keys:
       - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKDwC+rD+ycqNt6ii4zWZSBwzofrBNJ8qcHoO0Sc9KN5
+packages:
+  - git
 write_files:
 - path: /opt/post-install.sh
   permissions: '0755'
@@ -28,7 +30,9 @@ write_files:
     echo "Start the app!"
     mkdir /app
     cd /app
-    curl -LO https://raw.githubusercontent.com/bitnami/containers/main/bitnami/laravel/docker-compose.yml
+    git clone https://github.com/bociankruk/awesome-compose
+    cd awesome-compose/angular
+    docker-compose build
     docker-compose up -d
     echo "App has been started"
 runcmd:
