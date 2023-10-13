@@ -7,7 +7,7 @@ resource "digitalocean_monitor_alert" "cpu_alert" {
   compare     = "GreaterThan"
   value       = var.monitoring_cpu_threshold
   enabled     = true
-  tags        = [var.var.app_name]
+  tags        = [var.app_name]
   description = "${var.app_name}-high-cpu-usage"
 }
 
@@ -20,7 +20,7 @@ resource "digitalocean_monitor_alert" "ram_alert" {
   compare     = "GreaterThan"
   value       = var.monitoring_ram_threshold
   enabled     = true
-  tags        = [var.var.app_name]
+  tags        = [var.app_name]
   description = "${var.app_name}-high-ram-usage"
 }
 
@@ -33,6 +33,6 @@ resource "digitalocean_monitor_alert" "disk_alert" {
   compare     = "GreaterThan"
   value       = var.monitoring_disk_threshold
   enabled     = true
-  tags        = [var.var.app_name]
+  tags        = [var.app_name]
   description = "${var.app_name}-high-disk-usage"
 }
