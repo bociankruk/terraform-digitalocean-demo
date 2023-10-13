@@ -41,7 +41,7 @@ variable "app_http_port" {
   description = "The http port on which application is running."
 }
 
-variable "monitoring_notification_email" {
+variable "monitoring_email" {
   type        = string
   description = "Email address where alerts will be sent."
 }

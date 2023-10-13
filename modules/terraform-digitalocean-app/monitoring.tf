@@ -1,6 +1,6 @@
 resource "digitalocean_monitor_alert" "cpu_alert" {
   alerts {
-    email = [var.monitoring_notification_email]
+    email = [var.monitoring_email]
   }
   window      = "5m"
   type        = "v1/insights/droplet/cpu"
@@ -13,7 +13,7 @@ resource "digitalocean_monitor_alert" "cpu_alert" {
 
 resource "digitalocean_monitor_alert" "ram_alert" {
   alerts {
-    email = [var.monitoring_notification_email]
+    email = [var.monitoring_email]
   }
   window      = "5m"
   type        = "v1/insights/droplet/memory_utilization_percent"
@@ -26,7 +26,7 @@ resource "digitalocean_monitor_alert" "ram_alert" {
 
 resource "digitalocean_monitor_alert" "disk_alert" {
   alerts {
-    email = [var.monitoring_notification_email]
+    email = [var.monitoring_email]
   }
   window      = "5m"
   type        = "v1/insights/droplet/disk_utilization_percent"

@@ -15,4 +15,5 @@ module "laravel-app" {
   app_domain        = var.app_domain
   app_domain_id     = digitalocean_domain.domain.id
   app_http_port     = 8000
+  monitoring_email  = "bociankruk@gmail.com"
 }
