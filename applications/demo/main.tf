@@ -23,5 +23,6 @@ module "angular-app" {
   app_domain        = var.app_domain
   app_domain_id     = digitalocean_domain.domain.id
   app_http_port     = 4200
-  monitoring_email  = "bociankruk@gmail.com"
+  monitor_email     = "bociankruk@gmail.com"
+  monitor_cpu_thr   = 75
 }

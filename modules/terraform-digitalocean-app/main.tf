@@ -1,5 +1,4 @@
-
-
+# Create DNS records for application
 resource "digitalocean_record" "a" {
   domain = var.app_domain_id
   type   = "A"
@@ -14,6 +13,7 @@ resource "digitalocean_record" "cname" {
   value  = "${digitalocean_record.a.fqdn}."
 }
 
+# Create SSL cretificate using Let's Encrypt for created DNS records
 resource "digitalocean_certificate" "cert" {
   name    = "${var.app_name}-le-cert"
   type    = "lets_encrypt"
@@ -24,6 +24,7 @@ resource "digitalocean_certificate" "cert" {
   }
 }
 
+# Create virtual machines
 resource "digitalocean_droplet" "web" {
   count      = var.droplet_count
   image      = "ubuntu-22-04-x64"
@@ -35,8 +36,9 @@ resource "digitalocean_droplet" "web" {
   monitoring = true
 }
 
-resource "digitalocean_firewall" "web" {
-  name        = "${var.app_name}-fw-allow-only-ssh"
+# Define firewall rule to allow only external traffic for SSH
+resource "digitalocean_firewall" "fw" {
+  name        = "${var.app_name}-fw"
   droplet_ids = digitalocean_droplet.web[*].id
   inbound_rule {
     protocol         = "tcp"
@@ -75,18 +77,17 @@ resource "digitalocean_firewall" "web" {
   }
 }
 
+# Define LoadBalancer for HTTPS traffic and assign it to created VMs
 resource "digitalocean_loadbalancer" "lb" {
   name                   = "${var.app_name}-lb"
   region                 = var.region
   redirect_http_to_https = true
 
   forwarding_rule {
-    entry_port     = 443
-    entry_protocol = "https"
-
-    target_port     = var.app_http_port
-    target_protocol = "http"
-
+    entry_port       = 443
+    entry_protocol   = "https"
+    target_port      = var.app_http_port
+    target_protocol  = "http"
     certificate_name = digitalocean_certificate.cert.name
   }
 

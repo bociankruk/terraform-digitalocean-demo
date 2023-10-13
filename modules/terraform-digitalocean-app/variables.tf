@@ -41,24 +41,24 @@ variable "app_http_port" {
   description = "The http port on which application is running."
 }
 
-variable "monitoring_email" {
+variable "monitor_email" {
   type        = string
   description = "Email address where alerts will be sent."
 }
 
-variable "monitoring_cpu_threshold" {
+variable "monitor_cpu_thr" {
   type        = number
   description = "Percetnage of CPU usage threshold to trigger alert."
   default     = 90
 }
 
-variable "monitoring_ram_threshold" {
+variable "monitor_ram_thr" {
   type        = number
   description = "Percetnage of RAM usage threshold to trigger alert."
   default     = 90
 }
 
-variable "monitoring_disk_threshold" {
+variable "monitor_disk_thr" {
   type        = number
   description = "Percetnage of disk usage threshold to trigger alert."
   default     = 70
