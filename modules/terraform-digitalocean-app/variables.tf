@@ -41,7 +41,25 @@ variable "app_http_port" {
   description = "The http port on which application is running."
 }
 
-# variable "droplet_ssh_key" {
-#   type = string
-#   description = "A public SSH key to access droplet"
-# }
+variable "monitoring_email" {
+  type        = string
+  description = "Email address where alerts will be sent."
+}
+
+variable "monitoring_cpu_threshold" {
+  type        = number
+  description = "Percetnage of CPU usage threshold to trigger alert."
+  default     = 90
+}
+
+variable "monitoring_ram_threshold" {
+  type        = number
+  description = "Percetnage of RAM usage threshold to trigger alert."
+  default     = 90
+}
+
+variable "monitoring_disk_threshold" {
+  type        = number
+  description = "Percetnage of disk usage threshold to trigger alert."
+  default     = 70
+}
