@@ -44,13 +44,13 @@ resource "digitalocean_firewall" "web" {
     source_addresses = ["0.0.0.0/0", "::/0"]
   }
   inbound_rule {
-    protocol         = "tcp"
-    port_range       = var.app_http_port
+    protocol                  = "tcp"
+    port_range                = var.app_http_port
     source_load_balancer_uids = [digitalocean_loadbalancer.lb.id]
   }
   outbound_rule {
-    protocol              = "tcp"
-    port_range            = var.app_http_port
+    protocol                       = "tcp"
+    port_range                     = var.app_http_port
     destination_load_balancer_uids = [digitalocean_loadbalancer.lb.id]
   }
   outbound_rule {

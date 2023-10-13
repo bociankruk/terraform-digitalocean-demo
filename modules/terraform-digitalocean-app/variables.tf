@@ -37,7 +37,7 @@ variable "droplet_user_data" {
 }
 
 variable "app_http_port" {
-  type = number
+  type        = number
   description = "The http port on which application is running."
 }
 
