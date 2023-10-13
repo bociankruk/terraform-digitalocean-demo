@@ -44,16 +44,16 @@ resource "digitalocean_loadbalancer" "lb" {
     entry_port     = 443
     entry_protocol = "https"
 
-    target_port     = 80
+    target_port     = 8000
     target_protocol = "http"
 
     certificate_name = digitalocean_certificate.cert.name
   }
 
   healthcheck {
-    port     = 443
-    protocol = "https"
-    path     = "/health"
+    port     = 8000
+    protocol = "http"
+    path     = "/"
   }
 
   droplet_tag = var.app_name

@@ -1,0 +1,36 @@
+#cloud-config
+users:
+  - name: demo
+    groups: docker
+    shell: /bin/bash
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+    ssh-authorized-keys:
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKDwC+rD+ycqNt6ii4zWZSBwzofrBNJ8qcHoO0Sc9KN5
+write_files:
+- path: /opt/post-install.sh
+  permissions: '0755'
+  content: |
+    #!/bin/bash
+    exec > >(tee /var/log/user-data.log | logger -t user-data -s 2>/dev/console) 2>&1
+    echo "Install docker"
+    curl -fsSL https://get.docker.com -o /tmp/get-docker.sh
+    sh /tmp/get-docker.sh
+
+    echo "Install docker-compose"
+    curl -SL https://github.com/docker/compose/releases/download/v2.22.0/docker-compose-linux-x86_64 -o /tmp/docker-compose
+    chmod +x /tmp/docker-compose
+    mv /tmp/docker-compose /usr/local/bin/
+- path: /opt/run-app.sh
+  permissions: '0755'
+  content: |
+    #!/bin/bash
+    exec > >(tee /var/log/user-data.log | logger -t user-data -s 2>/dev/console) 2>&1
+    echo "Start the app!"
+    mkdir /app
+    cd /app
+    curl -LO https://raw.githubusercontent.com/bitnami/containers/main/bitnami/laravel/docker-compose.yml
+    docker-compose up -d
+    echo "App has been started"
+runcmd:
+  - /opt/post-install.sh
+  - /opt/run-app.sh
