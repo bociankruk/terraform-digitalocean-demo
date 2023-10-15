@@ -11,3 +11,7 @@ Key features:
 * Secured access to virtual machines, only SSH access is allowed.
 * SSL certificate is genetrated by Let's Encrypt.
 * Simple monitoring alerts for VMs.
+
+Things to improve:
+* Use prebuilt Vm images with installed required software like docker, docker-compose.
+* Run web apps with from images that were already built and published on container registry.
